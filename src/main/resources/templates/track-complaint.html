@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Complaint Status - SmartServe</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+    <!-- Navbar Fragment -->
+    <div th:replace="~{fragments/navbar :: navbar('track')}"></div>
+
+    <main class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+
+                    <!-- Breadcrumb -->
+                    <nav aria-label="breadcrumb" class="mb-4">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Track Complaint</li>
+                        </ol>
+                    </nav>
+
+                    <!-- Search Input Box Card -->
+                    <div class="card shadow-sm border-0 rounded-4 mb-4 bg-white">
+                        <div class="card-body p-4 p-md-5">
+                            <div class="text-center mb-4">
+                                <span class="badge bg-info bg-opacity-25 text-primary px-3 py-1 rounded-pill fw-semibold mb-2">
+                                    Real-Time Tracking
+                                </span>
+                                <h3 class="fw-bold mb-1">Check Your Service Request Status</h3>
+                                <p class="text-secondary small">
+                                    Enter your unique complaint tracking identifier below to view live resolution updates.
+                                </p>
+                            </div>
+
+                            <form th:action="@{/complaints/track}" method="get" class="row g-2 justify-content-center">
+                                <div class="col-md-8">
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-text bg-light text-muted"><i class="bi bi-search"></i></span>
+                                        <input type="text"
+                                               class="form-control"
+                                               name="trackingId"
+                                               id="trackingId"
+                                               placeholder="e.g. SMP-20261029-ABCD"
+                                               th:value="${searchedId}"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">
+                                        Track Status
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Not Found Alert -->
+                    <div th:if="${notFound}" class="alert alert-warning border-warning shadow-sm rounded-3 p-4 mb-4 text-center">
+                        <i class="bi bi-exclamation-triangle fs-1 text-warning d-block mb-2"></i>
+                        <h5 class="fw-bold">No Complaint Found</h5>
+                        <p class="mb-2 text-secondary">
+                            We could not find any active complaint registered with Tracking ID: <strong th:text="${searchedId}">SMP-XXXX</strong>
+                        </p>
+                        <small class="text-muted">
+                            Please double-check your tracking ID or contact administrative support.
+                        </small>
+                    </div>
+
+                    <!-- Complaint Details Display (Only shown when a valid tracking ID matches) -->
+                    <div th:if="${complaint != null}" class="card shadow border-0 rounded-4 overflow-hidden mb-4">
+                        <!-- Card Header -->
+                        <div class="card-header bg-dark text-white p-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <div>
+                                <span class="small text-white-50 text-uppercase fw-semibold d-block">Complaint Tracking ID</span>
+                                <h4 class="mb-0 fw-bold font-monospace text-info" th:text="${complaint.trackingId}">SMP-20261029-XXXX</h4>
+                            </div>
+                            <div>
+                                <span class="badge py-2 px-3 fs-6"
+                                      th:classappend="'bg-' + ${complaint.status.badgeClass}"
+                                      th:text="${complaint.status.displayName}">
+                                    SUBMITTED
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-4 p-md-5">
+
+                            <!-- Visual Step Progress Indicator -->
+                            <div class="mb-5">
+                                <h6 class="text-muted text-uppercase fw-semibold small mb-4">Progress Lifecycle</h6>
+                                <div class="stepper-wrapper">
+                                    <!-- Step 1: SUBMITTED -->
+                                    <div class="stepper-item"
+                                         th:classappend="${complaint.status.name() == 'SUBMITTED' ? 'active' : 'completed'}">
+                                        <div class="step-counter"><i class="bi bi-file-earmark-text"></i></div>
+                                        <div class="stepper-title">Submitted</div>
+                                    </div>
+
+                                    <!-- Step 2: IN_PROGRESS -->
+                                    <div class="stepper-item"
+                                         th:classappend="${complaint.status.name() == 'IN_PROGRESS' ? 'active' : (complaint.status.name() == 'RESOLVED' ? 'completed' : '')}">
+                                        <div class="step-counter"><i class="bi bi-tools"></i></div>
+                                        <div class="stepper-title">In Progress</div>
+                                    </div>
+
+                                    <!-- Step 3: RESOLVED or REJECTED -->
+                                    <div class="stepper-item"
+                                         th:if="${complaint.status.name() != 'REJECTED'}"
+                                         th:classappend="${complaint.status.name() == 'RESOLVED' ? 'completed' : ''}">
+                                        <div class="step-counter"><i class="bi bi-check-lg"></i></div>
+                                        <div class="stepper-title">Resolved</div>
+                                    </div>
+
+                                    <!-- Alternative Step 3: REJECTED -->
+                                    <div class="stepper-item rejected"
+                                         th:if="${complaint.status.name() == 'REJECTED'}">
+                                        <div class="step-counter"><i class="bi bi-x-lg"></i></div>
+                                        <div class="stepper-title text-danger">Rejected</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Complaint Details Grid -->
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-8">
+                                    <label class="text-muted small fw-semibold text-uppercase">Complaint Title</label>
+                                    <h5 class="fw-bold text-dark" th:text="${complaint.title}">Damaged road surface</h5>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="text-muted small fw-semibold text-uppercase">Civic Category</label>
+                                    <div>
+                                        <span class="badge bg-primary fs-6 px-3 py-2" th:text="${complaint.category.displayName}">ROADS</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="text-muted small fw-semibold text-uppercase">Citizen's Detailed Description</label>
+                                <div class="p-3 bg-light rounded-3 border text-secondary" th:text="${complaint.description}">
+                                    Pothole near street intersection causing traffic congestion.
+                                </div>
+                            </div>
+
+                            <!-- Administrator Remarks (if any) -->
+                            <div class="mb-4">
+                                <label class="text-muted small fw-semibold text-uppercase">Official Administrator Remarks</label>
+                                <div th:if="${complaint.adminRemarks != null and !#strings.isEmpty(complaint.adminRemarks)}"
+                                     class="p-3 bg-info bg-opacity-10 border border-info rounded-3 text-dark">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <i class="bi bi-chat-quote-fill text-primary me-2"></i>
+                                        <strong class="small text-primary">Department Status Update:</strong>
+                                    </div>
+                                    <p class="mb-0" th:text="${complaint.adminRemarks}">Road repair team assigned for morning shift.</p>
+                                </div>
+                                <div th:if="${complaint.adminRemarks == null or #strings.isEmpty(complaint.adminRemarks)}"
+                                     class="p-3 bg-light rounded-3 border text-muted small fst-italic">
+                                    No administrative remarks have been attached yet.
+                                </div>
+                            </div>
+
+                            <!-- Timestamps Footer -->
+                            <div class="row g-3 pt-3 border-top text-muted small">
+                                <div class="col-sm-6">
+                                    <i class="bi bi-calendar-check me-1"></i>
+                                    <strong>Submitted:</strong> <span th:text="${#temporals.format(complaint.submissionTime, 'dd MMM yyyy, hh:mm a')}">29 Oct 2026, 10:00 AM</span>
+                                </div>
+                                <div class="col-sm-6 text-sm-end">
+                                    <i class="bi bi-clock-history me-1"></i>
+                                    <strong>Last Updated:</strong> <span th:text="${#temporals.format(complaint.lastUpdatedTime, 'dd MMM yyyy, hh:mm a')}">29 Oct 2026, 11:30 AM</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Fragment -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

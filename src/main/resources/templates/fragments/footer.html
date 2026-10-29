@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<footer th:fragment="footer" class="mt-auto">
+    <div class="container">
+        <div class="row g-4 py-4 border-bottom border-secondary">
+            <div class="col-lg-5 col-md-6">
+                <h5 class="text-white fw-bold d-flex align-items-center mb-3">
+                    <i class="bi bi-shield-check text-primary me-2"></i> SmartServe System
+                </h5>
+                <p class="small text-secondary mb-3">
+                    A Real-Time Complaint and Service Management System demonstrating an end-to-end automated
+                    DevOps lifecycle: Git version control, Maven automation, Jenkins CI/CD, Docker containerization,
+                    and Kubernetes orchestration with MongoDB persistence.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge bg-dark border border-secondary text-light">Git & GitHub</span>
+                    <span class="badge bg-dark border border-secondary text-light">Apache Maven</span>
+                    <span class="badge bg-dark border border-secondary text-light">Jenkins CI/CD</span>
+                    <span class="badge bg-dark border border-secondary text-light">Docker</span>
+                    <span class="badge bg-dark border border-secondary text-light">Kubernetes</span>
+                    <span class="badge bg-dark border border-secondary text-light">MongoDB</span>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <h6 class="text-white fw-semibold mb-3">Quick Navigation</h6>
+                <ul class="list-unstyled small mb-0">
+                    <li class="mb-2"><a th:href="@{/}" class="footer-link"><i class="bi bi-chevron-right me-1"></i> Home</a></li>
+                    <li class="mb-2"><a th:href="@{/complaints/new}" class="footer-link"><i class="bi bi-chevron-right me-1"></i> Submit Complaint</a></li>
+                    <li class="mb-2"><a th:href="@{/complaints/track}" class="footer-link"><i class="bi bi-chevron-right me-1"></i> Track Complaint</a></li>
+                    <li class="mb-2"><a th:href="@{/admin/dashboard}" class="footer-link"><i class="bi bi-chevron-right me-1"></i> Admin Dashboard</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+                <h6 class="text-white fw-semibold mb-3">DevOps System Telemetry</h6>
+                <p class="small text-secondary mb-2">
+                    Service Health Probe (Actuator) is configured for Docker container health checks and Kubernetes liveness/readiness probes.
+                </p>
+                <a th:href="@{/actuator/health}" target="_blank" class="btn btn-sm btn-outline-info">
+                    <i class="bi bi-activity me-1"></i> View Health Endpoint (/actuator/health)
+                </a>
+            </div>
+        </div>
+
+        <div class="row py-3">
+            <div class="col-md-6 text-center text-md-start small text-secondary">
+                &copy; <span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}">2026</span> SmartServe &bull; College CSE DevOps Case Study Project
+            </div>
+            <div class="col-md-6 text-center text-md-end small text-secondary">
+                Designed with Spring Boot 3 &bull; Java 21 &bull; MongoDB &bull; Bootstrap 5
+            </div>
+        </div>
+    </div>
+</footer>
+</html>

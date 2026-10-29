@@ -1,0 +1,17 @@
+# ==============================================================================
+# PersistentVolumeClaim for MongoDB Storage in Kubernetes
+# Ensures citizen complaints persist safely across Pod restarts
+# ==============================================================================
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pvc
+  labels:
+    app: mongodb
+    project: smartserve
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

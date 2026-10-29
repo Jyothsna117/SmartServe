@@ -1,0 +1,14 @@
+**/.git
+**/.gitignore
+**/.dockerignore
+target/
+.idea/
+*.iml
+.vscode/
+*.log
+.env
+.env.local
+Jenkinsfile
+k8s/
+README.md
+docs/

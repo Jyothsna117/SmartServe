@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Registered Successfully - SmartServe</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+    <!-- Navbar Fragment -->
+    <div th:replace="~{fragments/navbar :: navbar('submit')}"></div>
+
+    <main class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow border-0 rounded-4 text-center p-4 p-md-5 bg-white">
+
+                        <!-- Success Icon -->
+                        <div class="mx-auto mb-3 d-flex align-items-center justify-content-center bg-success bg-opacity-10 text-success rounded-circle" style="width: 80px; height: 80px;">
+                            <i class="bi bi-check-circle-fill fs-1"></i>
+                        </div>
+
+                        <span class="badge bg-success bg-opacity-25 text-success px-3 py-1 rounded-pill mx-auto mb-3 fw-semibold">
+                            Complaint Successfully Logged
+                        </span>
+
+                        <h2 class="fw-bold mb-2">Thank You for Your Report!</h2>
+                        <p class="text-secondary mb-4">
+                            Your complaint has been safely recorded in MongoDB and forwarded to our civic operations desk.
+                        </p>
+
+                        <!-- Tracking ID Box -->
+                        <div class="bg-light p-4 rounded-3 border mb-4">
+                            <span class="text-muted small text-uppercase fw-semibold d-block mb-1">Your Unique Tracking ID</span>
+                            <div class="d-flex align-items-center justify-content-center gap-2 flex-wrap">
+                                <span class="tracking-id-text text-primary" id="successTrackingId" th:text="${trackingId}">SMP-20261029-XXXX</span>
+                                <button type="button" class="btn btn-outline-primary btn-sm btn-copy-tracking ms-2" data-target="successTrackingId">
+                                    <i class="bi bi-clipboard me-1"></i> Copy ID
+                                </button>
+                            </div>
+                            <small class="text-muted mt-2 d-block">
+                                <i class="bi bi-info-circle me-1"></i> Please save or copy this ID to track your resolution status anytime.
+                            </small>
+                        </div>
+
+                        <!-- Summary of submitted complaint if available -->
+                        <div th:if="${complaint != null}" class="card border mb-4 text-start bg-body-tertiary">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted fw-semibold">Submission Summary</h6>
+                                <p class="mb-1"><strong>Title:</strong> <span th:text="${complaint.title}">Complaint Title</span></p>
+                                <p class="mb-1"><strong>Category:</strong> <span class="badge bg-primary" th:text="${complaint.category.displayName}">Sanitation</span></p>
+                                <p class="mb-1"><strong>Initial Status:</strong> <span class="badge bg-secondary" th:text="${complaint.status.displayName}">SUBMITTED</span></p>
+                                <p class="mb-0"><strong>Timestamp:</strong> <span th:text="${#temporals.format(complaint.submissionTime, 'dd MMM yyyy, hh:mm a')}">29 Oct 2026</span></p>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a th:href="@{/complaints/track(trackingId=${trackingId})}" class="btn btn-primary btn-lg px-4 shadow-sm">
+                                <i class="bi bi-crosshair me-2"></i> Track Complaint Now
+                            </a>
+                            <a th:href="@{/complaints/new}" class="btn btn-outline-secondary btn-lg px-4">
+                                <i class="bi bi-plus-lg me-1"></i> Submit Another
+                            </a>
+                            <a th:href="@{/}" class="btn btn-link text-decoration-none text-secondary">
+                                Return Home
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Fragment -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

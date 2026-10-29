@@ -1,0 +1,19 @@
+# ==============================================================================
+# MongoDB ClusterIP Service
+# Provides stable DNS resolution at: mongodb-service:27017
+# ==============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+  labels:
+    app: mongodb
+    project: smartserve
+spec:
+  type: ClusterIP
+  ports:
+    - port: 27017
+      targetPort: 27017
+      name: mongodb
+  selector:
+    app: mongodb

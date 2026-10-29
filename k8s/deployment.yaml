@@ -1,0 +1,61 @@
+# ==============================================================================
+# SmartServe Application Deployment
+# Deploys 2 high-availability Pod replicas with health probes and resource limits
+# ==============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smartserve-deployment
+  labels:
+    app: smartserve
+    project: smartserve
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: smartserve
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: smartserve
+    spec:
+      containers:
+        - name: smartserve-app
+          image: smartserve:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          envFrom:
+            - configMapRef:
+                name: smartserve-config
+            - secretRef:
+                name: smartserve-secret
+          resources:
+            requests:
+              cpu: 250m
+              memory: 384Mi
+            limits:
+              cpu: 1000m
+              memory: 768Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 45
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 2

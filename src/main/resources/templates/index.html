@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartServe - Real-Time Complaint & Service Management</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <div th:replace="~{fragments/navbar :: navbar('home')}"></div>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section text-center">
+            <div class="container">
+                <span class="badge bg-primary bg-opacity-25 text-info px-3 py-2 rounded-pill fw-semibold mb-3">
+                    <i class="bi bi-cpu me-1"></i> Automated DevOps Case Study Application
+                </span>
+                <h1 class="display-4 fw-bold text-white mb-3">SmartServe</h1>
+                <p class="hero-subtitle mb-4">
+                    A real-time municipal and civic complaint management platform. Submit service requests,
+                    receive unique tracking identifiers, monitor resolution workflows, and enable transparent administrative governance.
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a th:href="@{/complaints/new}" class="btn btn-primary btn-lg px-4 shadow">
+                        <i class="bi bi-plus-circle me-2"></i> Register New Complaint
+                    </a>
+                    <a th:href="@{/complaints/track}" class="btn btn-outline-light btn-lg px-4">
+                        <i class="bi bi-search me-2"></i> Track Complaint Status
+                    </a>
+                    <a th:href="@{/admin/dashboard}" class="btn btn-warning btn-lg px-4 text-dark fw-semibold">
+                        <i class="bi bi-speedometer2 me-2"></i> Admin Portal
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Service Cards & Quick Actions -->
+        <div class="container mb-5">
+            <div class="row g-4 justify-content-center">
+                <!-- Action 1: Submit -->
+                <div class="col-md-4">
+                    <div class="card feature-card h-100 p-4">
+                        <div class="card-icon bg-primary bg-opacity-10 text-primary">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">1. Register Complaint</h4>
+                        <p class="text-secondary small mb-4">
+                            Report issues related to Sanitation, Water Supply, Electricity, Roads, or General Civic infrastructure with validated server-side processing.
+                        </p>
+                        <a th:href="@{/complaints/new}" class="btn btn-outline-primary mt-auto">
+                            Submit Now <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Action 2: Track -->
+                <div class="col-md-4">
+                    <div class="card feature-card h-100 p-4">
+                        <div class="card-icon bg-info bg-opacity-10 text-info">
+                            <i class="bi bi-crosshair"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">2. Live Tracking</h4>
+                        <p class="text-secondary small mb-4">
+                            Check real-time progress using your unique Tracking ID (e.g., <code>SMP-YYYYMMDD-XXXX</code>). View remarks from public administrators instantly.
+                        </p>
+                        <a th:href="@{/complaints/track}" class="btn btn-outline-info mt-auto">
+                            Track Status <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Action 3: Governance -->
+                <div class="col-md-4">
+                    <div class="card feature-card h-100 p-4">
+                        <div class="card-icon bg-success bg-opacity-10 text-success">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">3. Admin Governance</h4>
+                        <p class="text-secondary small mb-4">
+                            Protected administrative dashboard enabling authorized officers to filter complaints, update statuses, assign departments, and add resolution remarks.
+                        </p>
+                        <a th:href="@{/admin/dashboard}" class="btn btn-outline-success mt-auto">
+                            Manage Complaints <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <section class="py-5 bg-white border-top border-bottom">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <span class="badge bg-secondary text-uppercase px-3 py-1 mb-2">Transparency & Speed</span>
+                    <h2 class="fw-bold">How SmartServe Works</h2>
+                    <p class="text-secondary">End-to-end civic complaint lifecycle from submission to resolution.</p>
+                </div>
+
+                <div class="row g-4 text-center">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="p-3">
+                            <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px; font-size: 1.25rem;">
+                                1
+                            </div>
+                            <h5 class="fw-bold">Submit Form</h5>
+                            <p class="text-muted small">Citizen provides complaint title, selects civic category, and provides detailed description.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="p-3">
+                            <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px; font-size: 1.25rem;">
+                                2
+                            </div>
+                            <h5 class="fw-bold">Auto ID Generation</h5>
+                            <p class="text-muted small">System auto-generates a collision-free Tracking ID and timestamps the request in MongoDB.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="p-3">
+                            <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px; font-size: 1.25rem;">
+                                3
+                            </div>
+                            <h5 class="fw-bold">Admin Assessment</h5>
+                            <p class="text-muted small">Authorized officer reviews complaint, marks status as IN_PROGRESS, and adds internal remarks.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="p-3">
+                            <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px; font-size: 1.25rem;">
+                                4
+                            </div>
+                            <h5 class="fw-bold">Resolution & Closure</h5>
+                            <p class="text-muted small">Ground team resolves the grievance. Status is marked RESOLVED, visible instantly to citizen.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+       
+    </main>
+
+    <!-- Footer Fragment -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# ==============================================================================
+# SmartServe ConfigMap
+# Non-sensitive runtime configuration parameters
+# ==============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: smartserve-config
+  labels:
+    app: smartserve
+    project: smartserve
+data:
+  # Connection URI to MongoDB running inside Kubernetes via ClusterIP DNS
+  # Alternatively, to connect to the Windows host MongoDB service from Minikube:
+  # mongodb://host.minikube.internal:27017/smartserve_db
+  SPRING_DATA_MONGODB_URI: "mongodb://mongodb-service:27017/smartserve_db"
+  SERVER_PORT: "8080"
